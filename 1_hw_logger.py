@@ -9,13 +9,14 @@ def logger(old_function):
     @functools.wraps(old_function)
     def new_function(*args, **kwargs):
         current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        print(f"{current_time}: {old_function}"
-              f"вызвана с args={args}, kwargs={kwargs}")
+        print(f"{current_time}: {old_function.__name__} "
+              f"вызвана с аргументами args={args}, kwargs={kwargs}. "
+              f"Результат: {old_function(*args, **kwargs)}")
         try:
             result = old_function(*args, **kwargs)
             with open(file_path, mode='a', encoding='utf-8') as log_file:
                 log_file.write(
-                    f"{current_time}: Функция '{old_function}"
+                    f"{current_time}: Функция '{old_function.__name__}"
                     f"вызвана с аргументами {args}, {kwargs}."
                     f"Результат: {result}\\n")
             return result
@@ -24,7 +25,7 @@ def logger(old_function):
             with open(file_path, mode='a', encoding='utf-8') as log_file:
                 log_file.write(
                     f"{current_time}:"
-                    f"Ошибка при вызове функции '{old_function}'."
+                    f"Ошибка при вызове функции '{old_function.__name__}'."
                     f"с аргуентами {args}, {kwargs}. "
                     f"Ошибка: {str(e)}\\n")
             raise
